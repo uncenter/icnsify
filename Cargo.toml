@@ -2,7 +2,7 @@
 name = "icnsify"
 version = "0.1.0"
 authors = ["uncenter <uncenter@uncenter.dev>"]
-license = "MIT"
+license = "GPL-3.0-only"
 description = "Convert PNGs to .icns."
 readme = "README.md"
 homepage = "https://github.com/uncenter/icnsify"

@@ -1,6 +1,6 @@
 # icnsify
 
-Convert PNGs to [`.icns`](https://en.wikipedia.org/wiki/Apple_Icon_Image_format). Originally adapted from Tauri's [`icon` conversion command](https://github.com/tauri-apps/tauri/blob/daf018e4f5d5f6dcde51c5de42d73ab15287ec7e/tooling/cli/src/icon.rs).
+Convert PNGs to [`.icns`](https://en.wikipedia.org/wiki/Apple_Icon_Image_format).
 
 ## Installation
 
@@ -16,4 +16,4 @@ icnsify [OPTIONS] <INPUT>
 
 ## License
 
-[MIT](LICENSE)
+[GPL-3.0](LICENSE)
