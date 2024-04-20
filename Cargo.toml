@@ -1,0 +1,22 @@
+[package]
+name = "icnsify"
+version = "0.1.0"
+authors = ["uncenter <uncenter@uncenter.dev>"]
+license = "MIT"
+description = "Convert PNGs to .icns."
+readme = "README.md"
+homepage = "https://github.com/uncenter/icnsify"
+repository = "https://github.com/uncenter/icnsify"
+keywords = ["cli"]
+categories = ["command-line-utilities"]
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+color-eyre = "0.6.3"
+icns = { package = "tauri-icns", version = "0.1" }
+image = "0.25.1"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
