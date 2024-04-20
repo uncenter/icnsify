@@ -22,9 +22,34 @@ struct Cli {
 	output: Option<PathBuf>,
 }
 
-struct IconData {
-	size: u32,
-	ostype: &'static str,
+const ICNS: &[(&str, u32)] = &[
+	("is32", 16),
+	("ic11", 32),
+	("il32", 32),
+	("ic12", 64),
+	("ic07", 128),
+	("ic13", 256),
+	("ic08", 256),
+	("ic14", 512),
+	("ic09", 512),
+	("ic10", 1024),
+];
+
+fn generate_icon(input: &image::DynamicImage, size: u32) -> Result<icns::Image> {
+	let mut buf = Vec::new();
+	let encoder =
+		PngEncoder::new_with_quality(&mut buf, CompressionType::Best, PngFilterType::Adaptive);
+	encoder.write_image(
+		input
+			.resize_exact(size, size, FilterType::Lanczos3)
+			.as_bytes(),
+		size,
+		size,
+		ColorType::Rgba8.into(),
+	)?;
+
+	let image = icns::Image::read_png(&buf[..])?;
+	Ok(image)
 }
 
 fn main() -> Result<()> {
@@ -38,78 +63,20 @@ fn main() -> Result<()> {
 
 	let mut family = IconFamily::new();
 
-	for entry in [
-		IconData {
-			size: 16,
-			ostype: "is32",
-		},
-		IconData {
-			size: 32,
-			ostype: "ic11",
-		},
-		IconData {
-			size: 32,
-			ostype: "il32",
-		},
-		IconData {
-			size: 64,
-			ostype: "ic12",
-		},
-		IconData {
-			size: 128,
-			ostype: "ic07",
-		},
-		IconData {
-			size: 256,
-			ostype: "ic13",
-		},
-		IconData {
-			size: 256,
-			ostype: "ic08",
-		},
-		IconData {
-			size: 512,
-			ostype: "ic14",
-		},
-		IconData {
-			size: 512,
-			ostype: "ic09",
-		},
-		IconData {
-			size: 1024,
-			ostype: "ic10",
-		},
-	] {
-		let size = entry.size;
-		let mut buf = Vec::new();
-
-		let encoder =
-			PngEncoder::new_with_quality(&mut buf, CompressionType::Best, PngFilterType::Adaptive);
-		encoder.write_image(
-			input
-				.resize_exact(size, size, FilterType::Lanczos3)
-				.as_bytes(),
-			size,
-			size,
-			ColorType::Rgba8.into(),
-		)?;
-
-		let image = icns::Image::read_png(&buf[..])?;
-
+	for &(ostype, size) in ICNS {
+		let icon = generate_icon(&input, size)?;
 		family.add_icon_with_type(
-			&image,
-			IconType::from_ostype(entry.ostype.parse().unwrap()).unwrap(),
+			&icon,
+			IconType::from_ostype(ostype.parse().unwrap()).unwrap(),
 		)?;
 	}
 
-	let mut out_file = BufWriter::new(File::create(args.output.unwrap_or_else(|| {
-		PathBuf::from(format!(
-			"{}.icns",
-			args.input.file_stem().unwrap().to_string_lossy()
-		))
+	let mut output = BufWriter::new(File::create(args.output.unwrap_or_else(|| {
+		let name = args.input.file_stem().unwrap().to_string_lossy();
+		PathBuf::from(format!("{}.icns", name))
 	}))?);
-	family.write(&mut out_file)?;
-	out_file.flush()?;
+	family.write(&mut output)?;
+	output.flush()?;
 
 	Ok(())
 }
