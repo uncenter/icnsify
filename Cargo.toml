@@ -17,6 +17,9 @@ color-eyre = "0.6.3"
 icns = { package = "tauri-icns", version = "0.1" }
 image = "0.25.1"
 
+[profile.release]
+lto = "fat"
+
 [lints.clippy]
 all = "warn"
 pedantic = "warn"
