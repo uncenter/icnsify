@@ -4,16 +4,24 @@ Convert PNGs to [`.icns`](https://en.wikipedia.org/wiki/Apple_Icon_Image_format)
 
 ## Installation
 
+### Cargo
+
 ```sh
 cargo install icnsify
-# or
-cargo install --git https://github.com/uncenter/icnsify.git
+```
+
+### Nix
+
+[Available through Nixpkgs](https://nixpkgs.dev/icnsify).
+
+```
+nix run nixpkgs#icnsify
 ```
 
 ## Usage
 
 ```
-icnsify [OPTIONS] <INPUT>
+icnsify [--output] <INPUT>
 ```
 
 ## License
