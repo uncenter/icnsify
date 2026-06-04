@@ -21,8 +21,12 @@ nix run nixpkgs#icnsify
 ## Usage
 
 ```
-icnsify [--output] <INPUT>
+icnsify <IMAGE> [--output <IMAGE>]
 ```
+
+Provide an input image to transform into a `.icns` file. The provided image must be a PNG with square/equal dimensions.
+
+By default, the resulting `.icns` file will be written to the same path as the input file with the `.icns` extension (`foo.png` becomes `foo.icns`). An alternative output path can be provided with `--output`.
 
 ## License
 
