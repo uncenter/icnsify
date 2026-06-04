@@ -15,8 +15,10 @@ use std::{
 
 #[derive(Parser)]
 struct Cli {
-	input: PathBuf,
+	/// Path to PNG image with square dimensions to transform.
+	image: PathBuf,
 
+	/// Custom output path for .icns file.
 	#[clap(short, long)]
 	output: Option<PathBuf>,
 }
@@ -55,7 +57,7 @@ fn main() -> Result<()> {
 	color_eyre::install()?;
 	let args = Cli::parse();
 
-	let input = ImageReader::open(&args.input)?.decode()?;
+	let input = ImageReader::open(&args.image)?.decode()?;
 	if input.height() != input.width() {
 		bail!("Image dimensions must be square.")
 	}
@@ -70,10 +72,10 @@ fn main() -> Result<()> {
 		)?;
 	}
 
-	let mut output = BufWriter::new(File::create(args.output.unwrap_or_else(|| {
-		let name = args.input.file_stem().unwrap().to_string_lossy();
-		PathBuf::from(format!("{}.icns", name))
-	}))?);
+	let mut output = BufWriter::new(File::create(
+		args.output
+			.unwrap_or_else(|| args.image.with_extension("icns")),
+	)?);
 	family.write(&mut output)?;
 	output.flush()?;
 
