@@ -5,8 +5,7 @@ use icns::{IconFamily, IconType};
 use image::{
 	codecs::png::{CompressionType, FilterType as PngFilterType, PngEncoder},
 	imageops::FilterType,
-	io::Reader as ImageReader,
-	ColorType, ImageEncoder,
+	ImageEncoder, ImageReader,
 };
 use std::{
 	fs::File,
@@ -45,7 +44,7 @@ fn generate_icon(input: &image::DynamicImage, size: u32) -> Result<icns::Image> 
 			.as_bytes(),
 		size,
 		size,
-		ColorType::Rgba8.into(),
+		input.color().into(),
 	)?;
 
 	let image = icns::Image::read_png(&buf[..])?;
